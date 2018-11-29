@@ -31,7 +31,7 @@ copygrid()
 
 
 def spawn():
-    c = randint(0, 6)
+    c = randint(0, 5)
     if c == 0:
         monsters.append([0, 0])
     elif c == 1:
@@ -43,8 +43,8 @@ def spawn():
 
 
 def move(monster):
-    c = int((random.random() * 100) % 6)
-    if c == 5:
+    c = int((random.random() * 100) % 5)
+    if c == 4:
         if playerx - monster[0] >= playery - monster[1] > 0:
             if monster[0] + 1 == playerx and monster[1] == playery:
                 player.alive = False
