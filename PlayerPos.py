@@ -14,9 +14,8 @@ import random
 
 class Players:
 
-    def __init__(self, grid, alive):
+    def __init__(self, grid):
         self.grid = grid
-        self.alive = alive
 
     def move_player(self):
         c = random.randint(0, 4)
