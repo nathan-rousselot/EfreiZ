@@ -10,14 +10,11 @@ Infos about the rules on my GitHub : https://github.com/RousselotN/Efrei/blob/ma
 The function move_player() needs to return an ARRAY which is either [0, 1], [1, 0], [-1, 0], [0, -1] in function on where you want to move.
 """
 
-
 import random
 
 class Players:
 
-    def __init__(self, x, y, grid, alive):
-        self.x = x
-        self.y = y
+    def __init__(self, grid, alive):
         self.grid = grid
         self.alive = alive
 
@@ -38,4 +35,4 @@ Slow == basic display to sse what your algorithm is doing."""
 
 def plays():
     return 'slow'
-    # return 'fast'
+    #return 'fast'

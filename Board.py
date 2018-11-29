@@ -1,19 +1,22 @@
 from PlayerPos import *
 from math import sqrt
-import matplotlib
 from pylab import *
 import time
 import random
 
-player = Players(14, 15, [[0 for i in range(30)] for j in range(30)], True)
+
+player = Players([[0 for i in range(30)] for j in range(30)], True)
+playerx = 14
+playery = 15
 score = 0
-pastpos = [player.x, player.y]
+pastpos = [playerx, playery]
 monsters = []
 
 def refresh_game():
     del monsters[:]
-    player.x = 14
-    player.y = 15
+    global playerx
+    global playery
+    playerx, playery = 14, 15
     copygrid()
     player.alive = True
 
@@ -21,7 +24,7 @@ def refresh_game():
 def copygrid():
     for monster in monsters:
         player.grid[monster[0]][monster[1]] = 7
-    player.grid[player.x][player.y] = 3
+    player.grid[playerx][playery] = 3
 
 
 copygrid()
@@ -42,37 +45,37 @@ def spawn():
 def move(monster):
     c = int((random.random() * 100) % 6)
     if c == 5:
-        if player.x - monster[0] >= player.y - monster[1] > 0:
-            if monster[0] + 1 == player.x and monster[1] == player.y:
+        if playerx - monster[0] >= playery - monster[1] > 0:
+            if monster[0] + 1 == playerx and monster[1] == playery:
                 player.alive = False
             monster[0] += 1
-        elif player.y - monster[1] >= player.x - monster[0] > 0:
-            if monster[0] == player.x and monster[1] + 1 == player.y:
+        elif playery - monster[1] >= playerx - monster[0] > 0:
+            if monster[0] == playerx and monster[1] + 1 == playery:
                 player.alive = False
             monster[1] += 1
-        elif 0 > player.y - monster[1] >= player.x - monster[0]:
-            if monster[0] - 1 == player.x and monster[1] == player.y:
+        elif 0 > playery - monster[1] >= playerx - monster[0]:
+            if monster[0] - 1 == playerx and monster[1] == playery:
                 player.alive = False
             monster[0] -= 1
-        elif 0 > player.x - monster[0] >= player.y - monster[1]:
-            if monster[0] == player.x and monster[1] - 1 == player.y:
+        elif 0 > playerx - monster[0] >= playery - monster[1]:
+            if monster[0] == playerx and monster[1] - 1 == playery:
                 player.alive = False
             monster[1] -= 1
     else:
         if c == 0 and monster[0] <= 28:
-            if monster[0] + 1 == player.x and monster[1] == player.y:
+            if monster[0] + 1 == playerx and monster[1] == playery:
                 player.alive = False
             monster[0] += 1
         elif c == 1 and monster[1] <= 28:
-            if monster[0] == player.x and monster[1] + 1 == player.y:
+            if monster[0] == playerx and monster[1] + 1 == playery:
                 player.alive = False
             monster[1] += 1
         elif c == 2 and monster[0] >= 1:
-            if monster[0] - 1 == player.x and monster[1] == player.y:
+            if monster[0] - 1 == playerx and monster[1] == playery:
                 player.alive = False
             monster[0] -= 1
         elif c == 3 and monster[1] >= 1:
-            if monster[0] == player.x and monster[1] - 1 == player.y:
+            if monster[0] == playerx and monster[1] - 1 == playery:
                 player.alive = False
             monster[1] -= 1
 
@@ -82,17 +85,19 @@ def anticheat(pastx, pasty, currx, curry):
 
 
 def gridEdit(i, j, val):
+    global playerx
+    global playery
     if (i > 28 and val[0] == 1) or (j > 28 and val[1] == 1) or (i == 0 and val[0] == -1) or (j == 0 and val[1] == -1):
         player.alive = False
     else:
         for monster in monsters:
-            if monster[0] == player.x + val[0] and monster[1] == player.y + val[1]:
+            if monster[0] == playerx + val[0] and monster[1] == playery + val[1]:
                 player.alive = False
         else:
-            pastpos = [player.x, player.y]
-            player.x += val[0]
-            player.y += val[1]
-            anticheat(pastpos[0], pastpos[1], player.x, player.y)
+            pastpos = [playerx, playery]
+            playerx += val[0]
+            playery += val[1]
+            anticheat(pastpos[0], pastpos[1], playerx, playery)
 
 
 def fast_play():
@@ -103,14 +108,14 @@ def fast_play():
             for monster in monsters:
                 player.grid[monster[0]][monster[1]] = 0
                 move(monster)
-            player.grid[player.x][player.y] = 0
-            gridEdit(player.x, player.y, player.move_player())
+            player.grid[playerx][playery] = 0
+            gridEdit(playerx, playery, player.move_player())
             copygrid()
             score += 1
             alive = player.alive
         refresh_game()
         alive = player.alive
-    print("Your score is:", score / 100)
+    print("Your score is:", score)
 
 
 def slow_play():
@@ -128,8 +133,8 @@ def slow_play():
         for monster in monsters:
             player.grid[monster[0]][monster[1]] = 0
             move(monster)
-        player.grid[player.x][player.y] = 0
-        gridEdit(player.x, player.y, player.move_player())
+        player.grid[playerx][playery] = 0
+        gridEdit(playerx, playery, player.move_player())
         copygrid()
         plt.imshow(player.grid, interpolation='nearest')
         plt.pause(0.1)
