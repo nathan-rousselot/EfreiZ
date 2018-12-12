@@ -1,5 +1,6 @@
 from PlayerPos import *
 from math import sqrt
+import matplotlib
 from pylab import *
 import time
 import random
@@ -118,7 +119,7 @@ def fast_play():
             copygrid()
             score += 1
         refresh_game()
-    print("Your score is:", score)
+    return score
 
 
 def slow_play():
@@ -140,19 +141,58 @@ def slow_play():
         plt.imshow(player.grid, interpolation='nearest')
         plt.pause(0.1)
         score += 1
-    print("Your score is:", score)
+    return(score)
 
 
-def play(play):
-    if play == 'slow':
+def get_score(line):
+    s = ""
+    i = 10
+    while line[i] != "\n":
+        s += line[i]
+        i += 1
+    return int(s)
+
+
+def order_scoreboard():
+    scoreboard = open("scoreboard.txt", 'r')
+    A = scoreboard.readlines()
+    n = len(A)
+    scoreboard.close()
+    scoreboard = open("scoreboard.txt", 'w').close()
+    for i in range(n - 3, 0, -1):
+        for j in range(i):
+            if get_score(A[j]) < get_score(A[j+1]):
+                A[j], A[j + 1] = A[j + 1], A[j]
+    scoreboard = open("scoreboard.txt", 'a')
+    i = n - 1
+    for i in A:
+        scoreboard.write(i)
+
+                
+def play():
+    n = plays()
+    if n == "slow":
         slow_play()
-    elif play == 'fast':
-        fast_play()
+        print("Your score is:", score)
+    elif n == "fast":
+        scoreboard = open("scoreboard.txt", 'a')
+        name = str(input("What's your nickname? (8 chars max) "))
+        if len(name) > 8 or len(name) == 0:
+            print("Name null too long")
+            return None
+        else:
+            while len(name) != 8:
+                name = name + " "
+        score = fast_play()
+        var_score = name + ": " + str(score) + "\n"
+        scoreboard.write(var_score)
+        order_scoreboard()
+        print("Your score is:", score)
     else:
         print("Stop being dumb plz.")
-        return (None)
+        return(None)
 
 #start = time.time()
-play(plays())
+play()
 #end = time.time()
 #print(end - start)

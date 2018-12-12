@@ -33,5 +33,5 @@ class Players:
 Slow == basic display to sse what your algorithm is doing."""
 
 def plays():
-    return 'slow'
-    #return 'fast'
+    #return 'slow'
+    return 'fast'
