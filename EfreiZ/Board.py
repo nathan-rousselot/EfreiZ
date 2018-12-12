@@ -153,6 +153,6 @@ def play(play):
         return (None)
 
 #start = time.time()
-#play(plays())
-end = time.time()
+play(plays())
+#end = time.time()
 #print(end - start)
